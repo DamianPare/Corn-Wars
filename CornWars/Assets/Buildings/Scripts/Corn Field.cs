@@ -7,6 +7,10 @@ public class CornField : BuildingShared
     [SerializeField] private float CropMatureTime = 1f;
     [SerializeField] private int CornPerHarvest = 50;
     [SerializeField] private ParticleSystem harvestParticle;
+    [SerializeField] private GameObject firstLevelPrefab;
+    [SerializeField] private GameObject secondLevelPrefab;
+    
+
     private float CropTimer = 0f;
     private int CornTotal;
     private void Update()
@@ -29,6 +33,8 @@ public class CornField : BuildingShared
 
     public void FarmLevelUp()
     {
+        firstLevelPrefab.SetActive(false);
+        secondLevelPrefab.SetActive(true);
         CornPerHarvest = 100;
     }
 }

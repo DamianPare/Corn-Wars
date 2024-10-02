@@ -10,12 +10,13 @@ public class BuildingManager : MonoBehaviour
 
     [SerializeField] private LayerMask BuildingMask;
     [SerializeField] private GameObject editMenu;
+    [SerializeField] private ParticleSystem levelUpParticle;
     private GameObject selectedBuilding;
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 200, BuildingMask))
@@ -42,6 +43,8 @@ public class BuildingManager : MonoBehaviour
     public void LevelUpBuilding()
     {
         editMenu.SetActive(false);
+        levelUpParticle.gameObject.transform.position = selectedBuilding.transform.position;
+        levelUpParticle.Play();
     }
 
     public void ExitMenu()

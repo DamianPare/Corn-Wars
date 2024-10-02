@@ -22,6 +22,7 @@ public class BuildingPlacementManager : MonoBehaviour
     private BuildingData _buildingToPlace = null;
     private Dictionary<string, GameObject> _ghostObjects = new();
     private GameObject _placementGhost = null;
+    private bool _allowPlace = true;
 
     /// <summary>
     /// Called by the <see cref="BuildingPlacementUI"/>
@@ -37,6 +38,10 @@ public class BuildingPlacementManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (!_allowPlace)
+        {
+            return;
+        }
 
         if (_buildingToPlace == null)
             return;
@@ -102,5 +107,10 @@ public class BuildingPlacementManager : MonoBehaviour
     {
         _buildingToPlace = null;
         _placementGhost.SetActive(false);
+    }
+
+    public void TogglePlacement(bool canPlace)
+    {
+        _allowPlace = canPlace;
     }
 }
