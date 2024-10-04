@@ -554,6 +554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6708138642924507872}
+  - component: {fileID: 6222765659624594349}
   - component: {fileID: 5812072018614845727}
   m_Layer: 7
   m_Name: Barn
@@ -587,6 +588,25 @@ Transform:
   - {fileID: 513638066020589168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &6222765659624594349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058120816368297485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9728f31f4c7fc4b4cacf3b3dd7c3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  editMenu: {fileID: 0}
+  levelUpParticle: {fileID: 0}
+  ScriptedObjectData: {fileID: 11400000, guid: efda06df6c7604eb08efc016b6063cf4, type: 2}
+  Health: 0
 --- !u!65 &5812072018614845727
 BoxCollider:
   m_ObjectHideFlags: 0

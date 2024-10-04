@@ -108,8 +108,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe53294752f51f4ca4f27d5b9c97ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BuildingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  editMenu: {fileID: 0}
+  levelUpParticle: {fileID: 0}
   ScriptedObjectData: {fileID: 11400000, guid: 0c5e657494a3c3f4eb7c5ea63b9dae6a, type: 2}
   damagePerSecond: 1
+  firstLevelPrefab: {fileID: 0}
+  secondLevelPrefab: {fileID: 0}
 --- !u!65 &5968167440819315012
 BoxCollider:
   m_ObjectHideFlags: 0

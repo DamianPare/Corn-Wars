@@ -46,12 +46,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4cf1535965796346959a03379d8b099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BuildingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  editMenu: {fileID: 0}
+  levelUpParticle: {fileID: 0}
   ScriptedObjectData: {fileID: 11400000, guid: 1b885e73661dc458b87913e46dc77d5b, type: 2}
   CropMatureTime: 1
   CornPerHarvest: 50
   harvestParticle: {fileID: 1110432719190501616, guid: a7fccffae0ed1454099ce34621774843,
     type: 3}
-  levelUpPrefab: {fileID: 0}
+  firstLevelPrefab: {fileID: 297938783104549652}
+  secondLevelPrefab: {fileID: 0}
 --- !u!65 &6023283834407446728
 BoxCollider:
   m_ObjectHideFlags: 0

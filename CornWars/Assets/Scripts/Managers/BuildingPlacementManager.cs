@@ -1,5 +1,8 @@
 using UnityEngine;
+using Pool;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
 /// <summary>
 /// This is the controller for placing buildings.
@@ -13,7 +16,7 @@ public class BuildingPlacementManager : MonoBehaviour
 
     public KeyCode placeKey;
     public KeyCode clearKey;
-    private GameObject placedBuilding;
+    private BuildingShared placedBuilding;
     private Vector3 chosenPlace;
     private Quaternion chosenRotation;
 
@@ -24,18 +27,51 @@ public class BuildingPlacementManager : MonoBehaviour
     private GameObject _placementGhost = null;
     private bool _allowPlace = true;
 
-    /// <summary>
-    /// Called by the <see cref="BuildingPlacementUI"/>
-    /// </summary>
+    private Dictionary<BuildingType, PoolManager> _placedBuildingPool;
+    
+
+    private void Start()
+    {
+        _placedBuildingPool = new Dictionary<BuildingType, PoolManager>();
+        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
+        {
+            _placedBuildingPool.Add(type,
+                new PoolManager(
+                () => CreatePoolObject(type),
+                GetBuildingFromPool,
+                ReturnBuildingToPool));
+        }
+    }
+
+    private BuildingShared CreatePoolObject(BuildingType buildingType)
+    {
+        BuildingData dataToUse = GetBuildingData(buildingType);
+        BuildingShared newPooledBuilding = Instantiate(_buildingToPlace.BuildingPlacedPrefab, transform);
+        
+        return newPooledBuilding;
+    }
+
+    private BuildingData GetBuildingData(BuildingType buildingType)
+    {
+        return _allBuildingData.Data.FirstOrDefault(buildingData => buildingData.KindOfStructure == buildingType);
+    }
+
+    private void GetBuildingFromPool(BuildingShared building)          
+    {
+        building.gameObject.SetActive(true);
+    }
+
+    private void ReturnBuildingToPool(BuildingShared building)
+    {
+        building.gameObject.SetActive(false);
+    }
+
+
     public void OnNewBuildingSelected(BuildingData building)
     {
         _buildingToPlace = building;
     }
 
-    /// <summary>
-    /// If we have a <see cref="_buildingToPlace"/> then show the ghost for it at the mouse position
-    /// This will need to calculate where ground is.
-    /// </summary>
     private void Update()
     {
         if (!_allowPlace)
@@ -71,9 +107,15 @@ public class BuildingPlacementManager : MonoBehaviour
 
             if (Input.GetKeyDown(placeKey))
             {
-                placedBuilding = _placementGhost;
+                
                 chosenPlace = hitInfo.point;
-                PlaceBuilding();
+
+                if(_buildingToPlace != null)
+                {
+                    GetBuildingFromPool(_buildingToPlace.BuildingPlacedPrefab);
+                    PlaceBuilding();
+                }
+
             }
 
             if (Input.GetKeyDown(clearKey))
@@ -101,12 +143,15 @@ public class BuildingPlacementManager : MonoBehaviour
         placedBuilding.transform.SetPositionAndRotation(chosenPlace, chosenRotation);
         placedParticle.gameObject.transform.position = chosenPlace;
         placedParticle.Play();
+
+        //CreatePoolObject(type);
     }
 
     private void ClearPlacement()
     {
         _buildingToPlace = null;
         _placementGhost.SetActive(false);
+        //ReturnBuildingToPool();
     }
 
     public void TogglePlacement(bool canPlace)

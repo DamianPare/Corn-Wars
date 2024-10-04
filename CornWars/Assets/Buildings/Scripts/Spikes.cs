@@ -5,6 +5,8 @@ using UnityEngine;
 public class Spikes : BuildingShared
 {
     [SerializeField] private int damagePerSecond = 1;
+    [SerializeField] private GameObject firstLevelPrefab;
+    [SerializeField] private GameObject secondLevelPrefab;
 
     private void OnCollisionStay(Collision collision)
     {
@@ -14,5 +16,7 @@ public class Spikes : BuildingShared
     public void SpikeLevelUp()
     {
         damagePerSecond = 2;
+        firstLevelPrefab.SetActive(false);
+        secondLevelPrefab.SetActive(true);
     }
 }

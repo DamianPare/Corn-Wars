@@ -16,7 +16,8 @@ MonoBehaviour:
   _armor: 5
   _buildingGhostPrefab: {fileID: 3864359237397587828, guid: 29300a481cc10294c8651690368325de,
     type: 3}
-  _buildingPlacedPrefab: {fileID: 297938783104549652, guid: d9f325ad3637d504aa76a795cbb19add,
+  _buildingPlacedPrefab: {fileID: 2994504213311481501, guid: 39542a988cb95bf44854b6a5da620747,
     type: 3}
-  _buildingSprite: {fileID: 0}
+  _buildingSprite: {fileID: 21300000, guid: 9cfebd16b30603a49a881eff3ce93657, type: 3}
   _kindOfStructure: 5
+  _buildingName: Corn Field

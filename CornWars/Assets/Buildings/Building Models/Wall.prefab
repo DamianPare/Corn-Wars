@@ -660,6 +660,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5453096995910616473}
+  - component: {fileID: 6983203170609727706}
   - component: {fileID: 4917772614566941571}
   m_Layer: 7
   m_Name: Wall
@@ -696,6 +697,24 @@ Transform:
   - {fileID: 3444991802569239027}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &6983203170609727706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3722275792277867935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46533469a8fd91744b1d615e7eaff841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  editMenu: {fileID: 0}
+  levelUpParticle: {fileID: 0}
+  ScriptedObjectData: {fileID: 11400000, guid: 94b3487a4f318a64391c7d9bce5a6fce, type: 2}
 --- !u!65 &4917772614566941571
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -358,5 +358,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc51946752c7c4eb18ffe9a348390207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingSprite: {fileID: 4480697464571527065, guid: 93d31c8d59d87814789cdb149697b138,
-    type: 3}
+  BuildingSprite: {fileID: 4850160077554818108}
+  BuildingText: {fileID: 8487099870800434379}

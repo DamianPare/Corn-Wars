@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 [CreateAssetMenu(
@@ -9,19 +10,19 @@ public class BuildingData : ScriptableObject
     [SerializeField] private int[] _maxHp;
     [SerializeField] private int _armor;
     [SerializeField] private GameObject _buildingGhostPrefab;
-    [SerializeField] private GameObject _buildingPlacedPrefab;
+    [SerializeField] private BuildingShared _buildingPlacedPrefab;
     [SerializeField] private Sprite _buildingSprite;
-    [SerializeField] private Text _buildingText;
     [SerializeField] private BuildingType _kindOfStructure;
+    [SerializeField] private string _buildingName;
 
     public int[] MaxHp => _maxHp;
     public int Armor => _armor;
     public GameObject BuildingGhostPrefab => _buildingGhostPrefab;
-    public GameObject BuildingPlacedPrefab => _buildingPlacedPrefab;
+    public BuildingShared BuildingPlacedPrefab => _buildingPlacedPrefab;
     public Sprite BuildingSprite => _buildingSprite;
 
-    public Text BuildingText => _buildingText;
     public BuildingType KindOfStructure => _kindOfStructure;
+    public string BuildingName => _buildingName;
 
     public bool CanLevelUp(int currentLevel)
     {

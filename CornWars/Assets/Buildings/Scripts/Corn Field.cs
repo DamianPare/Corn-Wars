@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CornField : BuildingShared
 {
@@ -13,7 +14,7 @@ public class CornField : BuildingShared
 
     private float CropTimer = 0f;
     private int CornTotal;
-    private void Update()
+    void Update()
     {
         CropTimer += Time.deltaTime;
 
@@ -31,8 +32,9 @@ public class CornField : BuildingShared
         CornTotal += CornPerHarvest;
     }
 
-    public void FarmLevelUp()
+    public override void LevelUpBuilding()
     {
+        base.LevelUpBuilding();
         firstLevelPrefab.SetActive(false);
         secondLevelPrefab.SetActive(true);
         CornPerHarvest = 100;
