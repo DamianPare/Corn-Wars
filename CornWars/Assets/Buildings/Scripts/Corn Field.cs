@@ -34,7 +34,6 @@ public class CornField : BuildingShared
 
     public override void LevelUpBuilding()
     {
-        base.LevelUpBuilding();
         firstLevelPrefab.SetActive(false);
         secondLevelPrefab.SetActive(true);
         CornPerHarvest = 100;

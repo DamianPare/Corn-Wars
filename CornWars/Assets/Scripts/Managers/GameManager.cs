@@ -11,8 +11,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask BuildingMask;
     [SerializeField] private GameObject editMenu;
     [SerializeField] private ParticleSystem levelUpParticle;
+    [SerializeField] private BuildingPlacementManager _placementManager;
     private GameObject selectedBuilding;
+    private BuildingShared building;
 
+    [SerializeField] private int _gridWidth = 10, _gridHeight = 10, _cellSize = 10;
+    private GameGrid _gameGrid;
+    public GameGrid GameGrid => _gameGrid;
+
+    private void Awake()
+    {
+        _placementManager.SetGameManager(this);
+
+        _gameGrid = new GameGrid(_gridWidth, _gridHeight, _cellSize);
+    }
 
     private void Update()
     {
@@ -22,11 +34,10 @@ public class GameManager : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 200, BuildingMask))
             {
                 selectedBuilding = hitInfo.transform.gameObject;
+                building = selectedBuilding.GetComponent<BuildingShared>();
                 EditBuilding();
             }
         }
-
-        Debug.Log(selectedBuilding);
     }
 
     void EditBuilding()
@@ -36,15 +47,17 @@ public class GameManager : MonoBehaviour
 
     public void DeleteBuilding()
     {
-        selectedBuilding.SetActive(false);
+        _placementManager.ReleasePooledObject(building);
         editMenu.SetActive(false);
+        selectedBuilding = null;
     }
 
-    public virtual void LevelUpBuilding()
+    public void LevelUpBuilding()
     {
         editMenu.SetActive(false);
-        levelUpParticle.gameObject.transform.position = selectedBuilding.transform.position;
-        levelUpParticle.Play();
+        building.LevelUpBuilding();
+        //levelUpParticle.gameObject.transform.position = selectedBuilding.transform.position;
+        //levelUpParticle.Play();
     }
 
     public void ExitMenu()

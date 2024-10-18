@@ -14,7 +14,9 @@ public class BuildingPlacementManager : MonoBehaviour
     [SerializeField] private LayerMask GroundMask;
     [SerializeField] private ParticleSystem placedParticle;
 
-    public KeyCode placeKey;
+    [SerializeField] private GameManager _gameManager;
+
+    public KeyCode placeKey;                                                      
     public KeyCode clearKey;
     private BuildingShared placedBuilding;
     private Vector3 chosenPlace;
@@ -45,9 +47,11 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private BuildingShared CreatePoolObject(BuildingType buildingType)
     {
+
+        BuildingShared newPooledBuilding;
         BuildingData dataToUse = GetBuildingData(buildingType);
-        BuildingShared newPooledBuilding = Instantiate(_buildingToPlace.BuildingPlacedPrefab, transform);
-        
+        newPooledBuilding = Instantiate(dataToUse.BuildingPlacedPrefab, transform);
+
         return newPooledBuilding;
     }
 
@@ -61,15 +65,29 @@ public class BuildingPlacementManager : MonoBehaviour
         building.gameObject.SetActive(true);
     }
 
-    private void ReturnBuildingToPool(BuildingShared building)
+    public void ReturnBuildingToPool(BuildingShared building)
     {
         building.gameObject.SetActive(false);
     }
 
-
+    public void ReleasePooledObject(BuildingShared building)
+    {
+        _placedBuildingPool[building.Data.KindOfStructure].Release(building);
+    }
     public void OnNewBuildingSelected(BuildingData building)
     {
         _buildingToPlace = building;
+    }
+
+    internal BuildingShared SpawnBuilding(BuildingType buildingtype)
+    {
+        var building = _placedBuildingPool[buildingtype].Get();
+        building.transform.SetPositionAndRotation(chosenPlace, chosenRotation);
+
+        placedParticle.gameObject.transform.position = chosenPlace;
+        placedParticle.Play();
+
+        return building;
     }
 
     private void Update()
@@ -88,6 +106,7 @@ public class BuildingPlacementManager : MonoBehaviour
             if (_placementGhost != null)
             {
                 _placementGhost.SetActive(false);
+
             }
 
             if (_ghostObjects.TryGetValue(_buildingToPlace.BuildingGhostPrefab.name, out var existingGhost))
@@ -103,17 +122,18 @@ public class BuildingPlacementManager : MonoBehaviour
                 _ghostObjects.Add(_buildingToPlace.BuildingGhostPrefab.name, _placementGhost);
             }
 
-            _placementGhost.transform.position = hitInfo.point;
+            var pos = _gameManager.GameGrid.GetCellWorldCenter(hitInfo.point);
+
+            _placementGhost.transform.position = pos;
 
             if (Input.GetKeyDown(placeKey))
             {
-                
-                chosenPlace = hitInfo.point;
+
+                chosenPlace = pos;
 
                 if(_buildingToPlace != null)
                 {
-                    GetBuildingFromPool(_buildingToPlace.BuildingPlacedPrefab);
-                    PlaceBuilding();
+                    SpawnBuilding(_buildingToPlace.KindOfStructure);
                 }
 
             }
@@ -137,25 +157,19 @@ public class BuildingPlacementManager : MonoBehaviour
         }
     }
 
-    private void PlaceBuilding()
-    {
-        placedBuilding = Instantiate(_buildingToPlace.BuildingPlacedPrefab, transform);
-        placedBuilding.transform.SetPositionAndRotation(chosenPlace, chosenRotation);
-        placedParticle.gameObject.transform.position = chosenPlace;
-        placedParticle.Play();
-
-        //CreatePoolObject(type);
-    }
-
     private void ClearPlacement()
     {
         _buildingToPlace = null;
         _placementGhost.SetActive(false);
-        //ReturnBuildingToPool();
     }
 
     public void TogglePlacement(bool canPlace)
     {
         _allowPlace = canPlace;
+    }
+
+    internal void SetGameManager(GameManager gameManager)
+    {
+        _gameManager = gameManager;
     }
 }

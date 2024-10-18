@@ -18991,6 +18991,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   placedParticle: {fileID: 1459682671}
+  _gameManager: {fileID: 1134170744}
   placeKey: 323
   clearKey: 324
 --- !u!4 &1134170743
@@ -19028,6 +19029,10 @@ MonoBehaviour:
     m_Bits: 128
   editMenu: {fileID: 888505521}
   levelUpParticle: {fileID: 1140940766}
+  _placementManager: {fileID: 1134170742}
+  _gridWidth: 10
+  _gridHeight: 10
+  _cellSize: 10
 --- !u!1001 &1138582776
 PrefabInstance:
   m_ObjectHideFlags: 0

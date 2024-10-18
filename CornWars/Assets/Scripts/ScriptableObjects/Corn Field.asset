@@ -16,7 +16,7 @@ MonoBehaviour:
   _armor: 5
   _buildingGhostPrefab: {fileID: 3864359237397587828, guid: 29300a481cc10294c8651690368325de,
     type: 3}
-  _buildingPlacedPrefab: {fileID: 2994504213311481501, guid: 39542a988cb95bf44854b6a5da620747,
+  _buildingPlacedPrefab: {fileID: 1626938815948562, guid: 39542a988cb95bf44854b6a5da620747,
     type: 3}
   _buildingSprite: {fileID: 21300000, guid: 9cfebd16b30603a49a881eff3ce93657, type: 3}
   _kindOfStructure: 5

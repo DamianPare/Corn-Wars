@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BuildingShared : GameManager
+public class BuildingShared : MonoBehaviour
 {
     [SerializeField] private BuildingData ScriptedObjectData;
+
+    public BuildingData Data => ScriptedObjectData;
 
     private int CurrentHp;
     private int BuildingLevel;
@@ -46,10 +48,8 @@ public class BuildingShared : GameManager
     {
         ScriptedObjectData.CanLevelUp(BuildingLevel);
     }
-
-    public override void LevelUpBuilding()
+    public virtual void LevelUpBuilding()
     {
-        base.LevelUpBuilding();
         Debug.Log("Hello");
     }
 
