@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: Cannon
   m_EditorClassIdentifier: 
   _maxHp: 
+  _maxPlaceable: 10
   _armor: 0
   _buildingGhostPrefab: {fileID: 7270855514553659466, guid: 24803ca65ed994f2980c69a2c989645e,
     type: 3}
-  _buildingPlacedPrefab: {fileID: 3464702564313717981, guid: e125ad96156452b4caf49891019b956a,
-    type: 3}
+  _buildingPlacedPrefab: {fileID: 0}
   _buildingSprite: {fileID: 0}
   _kindOfStructure: 4
+  _buildingName: 
+  _obstacleLevel: 0
+  _walkable: 0
+  placed: 0

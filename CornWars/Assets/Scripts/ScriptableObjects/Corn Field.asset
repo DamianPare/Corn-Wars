@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Corn Field
   m_EditorClassIdentifier: 
   _maxHp: c8000000
+  _maxPlaceable: 5
   _armor: 5
   _buildingGhostPrefab: {fileID: 3864359237397587828, guid: 29300a481cc10294c8651690368325de,
     type: 3}
@@ -21,3 +22,6 @@ MonoBehaviour:
   _buildingSprite: {fileID: 21300000, guid: 9cfebd16b30603a49a881eff3ce93657, type: 3}
   _kindOfStructure: 5
   _buildingName: Corn Field
+  _obstacleLevel: 0
+  _walkable: 0
+  placed: 0

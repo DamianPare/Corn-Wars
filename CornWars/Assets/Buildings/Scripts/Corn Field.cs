@@ -10,10 +10,8 @@ public class CornField : BuildingShared
     [SerializeField] private ParticleSystem harvestParticle;
     [SerializeField] private GameObject firstLevelPrefab;
     [SerializeField] private GameObject secondLevelPrefab;
-    
 
     private float CropTimer = 0f;
-    private int CornTotal;
     void Update()
     {
         CropTimer += Time.deltaTime;
@@ -25,11 +23,19 @@ public class CornField : BuildingShared
         }
     }
 
+    private void OnDisable()
+    {
+        ResetBuilding();
+    }
+
     private void AddCornToStorage()
     {
         harvestParticle.gameObject.transform.position = this.gameObject.transform.position;
         harvestParticle.Play();
-        CornTotal += CornPerHarvest;
+        Debug.Log(Owner);
+        Owner.ResourceGain(CornPerHarvest);
+        
+        //CornTotal += CornPerHarvest;
     }
 
     public override void LevelUpBuilding()
@@ -37,5 +43,17 @@ public class CornField : BuildingShared
         firstLevelPrefab.SetActive(false);
         secondLevelPrefab.SetActive(true);
         CornPerHarvest = 100;
+    }
+
+    private void ResetBuilding()
+    {
+        CornPerHarvest = 50;
+        firstLevelPrefab.SetActive(true);
+        secondLevelPrefab.SetActive(false);
+    }
+
+    public override void GetBuildingInfo()
+    {
+        base.GetBuildingInfo();
     }
 }

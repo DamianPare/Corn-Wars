@@ -10,6 +10,8 @@ using System.Linq;
 /// </summary>
 public class BuildingPlacementManager : MonoBehaviour
 {
+    private PlayerBuildingManager _localPlayerBuildingManager = null;
+
     [SerializeField] private AllBuildingData _allBuildingData;
     [SerializeField] private LayerMask GroundMask;
     [SerializeField] private ParticleSystem placedParticle;
@@ -47,7 +49,6 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private BuildingShared CreatePoolObject(BuildingType buildingType)
     {
-
         BuildingShared newPooledBuilding;
         BuildingData dataToUse = GetBuildingData(buildingType);
         newPooledBuilding = Instantiate(dataToUse.BuildingPlacedPrefab, transform);
@@ -73,6 +74,7 @@ public class BuildingPlacementManager : MonoBehaviour
     public void ReleasePooledObject(BuildingShared building)
     {
         _placedBuildingPool[building.Data.KindOfStructure].Release(building);
+        _localPlayerBuildingManager.RemoveBuilding(building);
     }
     public void OnNewBuildingSelected(BuildingData building)
     {
@@ -83,6 +85,8 @@ public class BuildingPlacementManager : MonoBehaviour
     {
         var building = _placedBuildingPool[buildingtype].Get();
         building.transform.SetPositionAndRotation(chosenPlace, chosenRotation);
+
+        _localPlayerBuildingManager.AddBuilding(building);
 
         placedParticle.gameObject.transform.position = chosenPlace;
         placedParticle.Play();
@@ -126,16 +130,14 @@ public class BuildingPlacementManager : MonoBehaviour
 
             _placementGhost.transform.position = pos;
 
-            if (Input.GetKeyDown(placeKey))
+            if (Input.GetKeyDown(placeKey) && _buildingToPlace != null)
             {
-
                 chosenPlace = pos;
 
-                if(_buildingToPlace != null)
+                if (_localPlayerBuildingManager.CanPlace(_buildingToPlace))
                 {
                     SpawnBuilding(_buildingToPlace.KindOfStructure);
                 }
-
             }
 
             if (Input.GetKeyDown(clearKey))
@@ -171,5 +173,10 @@ public class BuildingPlacementManager : MonoBehaviour
     internal void SetGameManager(GameManager gameManager)
     {
         _gameManager = gameManager;
+    }
+
+    public void SetLocalBuildingManager(PlayerBuildingManager playerBuildingManager)
+    {
+        _localPlayerBuildingManager = playerBuildingManager;
     }
 }

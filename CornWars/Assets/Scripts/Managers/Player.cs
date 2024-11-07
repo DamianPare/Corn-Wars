@@ -1,9 +1,11 @@
-
 using System;
 
 public class Player
 {
     private int _playerIndex;
+    private int _playerFaction;
+    public int PlayerFaction => _playerFaction;
+
     private float _storedPower;
     private PlayerBuildingManager _buildingManager;
 
@@ -11,12 +13,13 @@ public class Player
 
     public PlayerBuildingManager BuildingManager => _buildingManager;
 
-    public Player(int playerIndex)
+    public Player(int playerIndex, int playerFaction, GameManager gameManager)
     {
         _playerIndex = playerIndex;
+        _playerFaction = playerFaction;
         _storedPower = 0;
 
-        _buildingManager = new PlayerBuildingManager(this);
+        _buildingManager = new PlayerBuildingManager(this, gameManager);
     }
 
     public void ResourceGain(float gain)
@@ -25,4 +28,9 @@ public class Player
         OnPowerChanged?.Invoke(_storedPower);
     }
 
+    public void ResourceLoss(float loss)
+    {
+        _storedPower -= loss;
+        OnPowerChanged?.Invoke(_storedPower);
+    }
 }

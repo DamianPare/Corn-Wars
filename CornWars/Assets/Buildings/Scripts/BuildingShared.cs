@@ -9,27 +9,34 @@ public class BuildingShared : MonoBehaviour
 
     public BuildingData Data => ScriptedObjectData;
 
-    private int CurrentHp;
-    private int BuildingLevel;
+    private int _currentHp;
+    private int _buildingLevel;
 
-    protected PlayerBuildingManager _manager;
-    protected Player _owner;
+    public int _placed;
+
+    protected PlayerBuildingManager Manager;
+    protected Player Owner;
 
     private void Start()
     {
         if (ScriptedObjectData.MaxHp.Length > 0)
         {
-            CurrentHp = ScriptedObjectData.MaxHp[0];
+            _currentHp = ScriptedObjectData.MaxHp[0];
         }
-        
-        BuildingLevel = 1;
+    
+        _buildingLevel = 1;
     }
 
     public void SetManager(PlayerBuildingManager manager, ref Action onTick, Player owner)
     {
-        _manager = manager;
+        Manager = manager;
         onTick += Tick;
-        _owner = owner;
+        Owner = owner;
+    }
+
+    public int GetFaction()
+    {
+        return Owner.PlayerFaction;
     }
 
     public void CalculateDamage(int damageReceived)
@@ -38,22 +45,37 @@ public class BuildingShared : MonoBehaviour
         TakeDamage(damageReceived);
     }
 
-
     private void TakeDamage(int damageTaken)
     {
-        CurrentHp -= damageTaken;
+        _currentHp -= damageTaken;
     }
 
-    void CanLevelUp()
+    public void CanLevelUp()
     {
-        ScriptedObjectData.CanLevelUp(BuildingLevel);
+        ScriptedObjectData.CanLevelUp(_buildingLevel);
     }
+
     public virtual void LevelUpBuilding()
     {
-        Debug.Log("Hello");
+        
+    }
+
+    public virtual void GetBuildingInfo()
+    {
+
     }
 
     protected virtual void Tick()
     {
+
+    }
+
+    public virtual void OnPlaced() 
+    {
+
+    }
+    public virtual void OnRemoved() 
+    {
+
     }
 }

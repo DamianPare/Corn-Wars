@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: Wall
   m_EditorClassIdentifier: 
   _maxHp: 
+  _maxPlaceable: 100
   _armor: 0
   _buildingGhostPrefab: {fileID: 1596343609964450595, guid: a6b96c51619e455418e31e4e1fc10d8b,
     type: 3}
-  _buildingPlacedPrefab: {fileID: 3722275792277867935, guid: dcf22b649fb7ce54c891947e09cc6168,
+  _buildingPlacedPrefab: {fileID: 6983203170609727706, guid: dcf22b649fb7ce54c891947e09cc6168,
     type: 3}
   _buildingSprite: {fileID: 21300000, guid: e0f7cd23834f1d14889c5a7b4132c94a, type: 3}
   _kindOfStructure: 3
   _buildingName: Wall
+  _obstacleLevel: 0
+  _walkable: 0
+  placed: 0
