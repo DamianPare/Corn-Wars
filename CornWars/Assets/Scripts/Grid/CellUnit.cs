@@ -58,13 +58,11 @@ public class CellUnit : MonoBehaviour
         //_grid.Pathfinder.UpdateWalkableObstacles(_grid._grid);
         float step = Time.deltaTime * MoveSpeed;
         _moveTarget = _grid.GetCellPositionFromId(path[i]);
-        Vector3 pos = _moveTarget + offset;
-        Debug.Log(pos);
-        Debug.Log(_moveTarget);
-        transform.position = Vector3.MoveTowards(transform.position, pos, step);
-        //_previousPosition = transform.position;
-        //_grid.UpdateUnitCell(this, _previousPosition);
-        if (transform.position.Equals(pos) && i >= 0)
+        //Vector3 pos = _moveTarget + offset;
+        transform.position = Vector3.MoveTowards(transform.position, _moveTarget, step);
+        _previousPosition = transform.position;
+        _grid.UpdateUnitCell(this, _previousPosition);
+        if (transform.position.Equals(_moveTarget) && i >= 0)
             i--;
             Debug.Log(i);
 
