@@ -40,7 +40,25 @@ public class PlayerBuildingManager
     {
         _ownedBuildings[placedBuilding.Data.KindOfStructure].Remove(placedBuilding);
         placedBuilding.OnRemoved();
+
+        placedBuilding.SetManager(this, ref _tick, _owner);
+        var cellsBuildingIsOn = _gameManager.GameGrid.GetCellsAroundPosition(placedBuilding.transform.position, 0);
+        foreach (var cell in cellsBuildingIsOn)
+        {
+            cell.RemoveBuildingFromCell(placedBuilding);
+        }
     }
+
+    public void LevelUpBuilding(BuildingShared placedBuilding)
+    {
+        placedBuilding.SetManager(this, ref _tick, _owner);
+        var cellsBuildingIsOn = _gameManager.GameGrid.GetCellsAroundPosition(placedBuilding.transform.position, 0);
+        foreach (var cell in cellsBuildingIsOn)
+        {
+            cell.UpdateBuildingInCell(placedBuilding);
+        }
+    }
+
 
     public void OnUpdate()
     {

@@ -85,7 +85,30 @@ public class GridCell
     {
         _buildingInCell = buildingInCell;
         _isWalkable = buildingInCell.Data.Walkable;
-        Debug.Log(buildingInCell.Data.Walkable);
+        _obstacleLevel = buildingInCell.Data.ObstacleLevel;
+        Debug.Log(buildingInCell);
         Debug.Log(Walkable);
+        var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
+    }
+
+    public void RemoveBuildingFromCell(BuildingShared buildingInCell)
+    {
+        _buildingInCell = buildingInCell;
+        _isWalkable = buildingInCell.Data.Walkable;
+        Debug.Log(_isWalkable);
+        _obstacleLevel = buildingInCell.Data.ObstacleLevel;
+        var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
+    }
+
+    public void UpdateBuildingInCell(BuildingShared buildingInCell)
+    {
+        _buildingInCell = buildingInCell;
+        _isWalkable = buildingInCell.Data.Walkable;
+        Debug.Log(_isWalkable);
+        _obstacleLevel = buildingInCell.Data.ObstacleLevel;
+        var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
     }
 }

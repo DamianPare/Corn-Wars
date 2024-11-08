@@ -35,18 +35,17 @@ public class PathfindingWithAStar
             }
             walkablePositions[cell.Key] = cell.Value.Walkable;
 
-            if (!walkablePositions.ContainsKey(cell.Key))
-            {
-                walkablePositions.Add(cell.Key, true);
-            }
-            walkablePositions[cell.Key] = cell.Value.Walkable;
-
             if (!obstacles.ContainsKey(cell.Key))
             {
                 obstacles.Add(cell.Key, 1);
             }
             obstacles[cell.Key] = cell.Value.ObstacleLevel;
         }
+    }
+
+    public void UpdateCellAfterbuildingPlaced(Vector2 pos, bool bWalkable)
+    {
+        walkablePositions[pos] = bWalkable;
     }
 
     private bool CanMove(Vector2 nextPosition)
@@ -109,6 +108,11 @@ public class PathfindingWithAStar
     {
         if (obstacles.Keys.Contains(node))
         {
+            if (obstacles[node] != 1)
+            {
+                Debug.Log(obstacles[node]);
+            }
+            
             return obstacles[node];
         }
         else
@@ -207,6 +211,11 @@ public class PathfindingWithAStar
             {
                 // Get the distance so far, add it to the distance to the neighbor
                 int currScore = distanceFromStart[curr] + Weight(node);
+                if (Weight(node) != 1)
+                {
+                    Debug.Log(Weight(node));
+                }
+                
 
                 // If our distance to this neighbor is LESS than another calculated shortest path
                 //    to this neighbor, set a new node parent and update the scores as our current

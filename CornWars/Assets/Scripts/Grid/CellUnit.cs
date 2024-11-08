@@ -24,6 +24,7 @@ public class CellUnit : MonoBehaviour
     private BuildingShared target;
 
     private System.Collections.Generic.IList<Vector2> path;
+    public GameObject testcube;
 
     /// <summary>
     /// todo Update with max health from scriptable object and only allow health to change via function
@@ -55,16 +56,17 @@ public class CellUnit : MonoBehaviour
 
     public void Move()
     {
-        //_grid.Pathfinder.UpdateWalkableObstacles(_grid._grid);
         float step = Time.deltaTime * MoveSpeed;
-        _moveTarget = _grid.GetCellPositionFromId(path[i]);
-        //Vector3 pos = _moveTarget + offset;
+        var target = _grid.GetCellPositionFromId(path[i]);
+        _moveTarget = _grid.GetCellWorldCenter(target);
         transform.position = Vector3.MoveTowards(transform.position, _moveTarget, step);
         _previousPosition = transform.position;
         _grid.UpdateUnitCell(this, _previousPosition);
+
         if (transform.position.Equals(_moveTarget) && i >= 0)
             i--;
-            Debug.Log(i);
+            Instantiate(testcube, _moveTarget, Quaternion.identity);
+            Debug.Log(_moveTarget);
 
         if (i < 0)
         {
@@ -77,10 +79,6 @@ public class CellUnit : MonoBehaviour
         _faction = faction;
         name = $"P{faction}_{name}_{unitCounter}";
         _grid = gameGrid;
-
-        var start = _grid.CellIdFromPosition(transform.position);
-        offset = transform.position - _grid.GetCellPositionFromId(start);
-        Debug.Log("offset is " + offset);
     }
 
     public void SetCell(GridCell gridCell)
@@ -90,9 +88,12 @@ public class CellUnit : MonoBehaviour
 
     public void MoveToTarget(Vector3 target)
     {
-        endPos = target;
-        
-        path = _grid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarEuclid, transform.position, endPos);
-        i = path.Count - 1;
+        if (transform.position != target)
+        {
+            endPos = target;
+
+            path = _grid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarEuclid, transform.position, endPos);
+            i = path.Count - 1;
+        }
     }
 }

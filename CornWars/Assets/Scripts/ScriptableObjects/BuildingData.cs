@@ -16,7 +16,7 @@ public class BuildingData : ScriptableObject
     [SerializeField] private BuildingType _kindOfStructure;
     [SerializeField] private string _buildingName;
     [SerializeField] private int _obstacleLevel;
-    [SerializeField] private bool _walkable;
+    //[SerializeField] private bool _walkable;
 
     public int placed;
 
@@ -30,7 +30,7 @@ public class BuildingData : ScriptableObject
     public BuildingType KindOfStructure => _kindOfStructure;
     public string BuildingName => _buildingName;
     public int ObstacleLevel => _obstacleLevel;
-    public bool Walkable => _walkable;
+    public bool Walkable;
 
     public bool CanLevelUp(int currentLevel)
     {
