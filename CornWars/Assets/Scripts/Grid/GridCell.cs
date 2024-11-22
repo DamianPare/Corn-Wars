@@ -89,7 +89,7 @@ public class GridCell
         Debug.Log(buildingInCell);
         Debug.Log(Walkable);
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
     }
 
     public void RemoveBuildingFromCell(BuildingShared buildingInCell)
@@ -99,7 +99,7 @@ public class GridCell
         Debug.Log(_isWalkable);
         _obstacleLevel = buildingInCell.Data.ObstacleLevel;
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
     }
 
     public void UpdateBuildingInCell(BuildingShared buildingInCell)
@@ -109,6 +109,6 @@ public class GridCell
         Debug.Log(_isWalkable);
         _obstacleLevel = buildingInCell.Data.ObstacleLevel;
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
     }
 }

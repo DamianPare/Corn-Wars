@@ -40,10 +40,10 @@ public class GameGrid
         int size = _cellSize;
         float halfSize = size / 2f;
 
-        float posX = 0 - ((w * size) + halfSize);
+        float posX = 1 - ((w * size) + halfSize);
         for (int i = -w; i <= w + 1; i++)
         {
-            float posZ = 0 - ((h * size) + halfSize);
+            float posZ = 1 - ((h * size) + halfSize);
             for (int j = -h; j <= h + 1; j++)
             {
                 posZ += size;

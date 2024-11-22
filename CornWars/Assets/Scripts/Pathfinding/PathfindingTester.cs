@@ -44,16 +44,16 @@ public class PathfindingTester : MonoBehaviour
     {
         foreach (var unit in _unitsListA)
         {
-            if (BuildingCheck(unit)) continue;
-            if (EnemyCheck(unit)) continue;
+            //if (BuildingCheck(unit)) continue;
+            //if (EnemyCheck(unit)) continue;
             // if none, patrol randomly
             unit.MoveToTarget(endPos.position);
         }
 
         foreach (var unit in _unitsListB)
         {
-            if (BuildingCheck(unit)) continue;
-            if (EnemyCheck(unit)) continue;
+            //if (BuildingCheck(unit)) continue;
+            //if (EnemyCheck(unit)) continue;
             // if none, patrol randomly
             unit.MoveToTarget(endPos.position);
         }
@@ -86,6 +86,7 @@ public class PathfindingTester : MonoBehaviour
         return false;
     }
 
+    /*
     private void OnDrawGizmos()
     {
         if (GameManager == null || GameManager.GameGrid == null)
@@ -125,4 +126,5 @@ public class PathfindingTester : MonoBehaviour
             Gizmos.DrawWireCube(pos, Vector3.one * GameManager.GameGrid.CellSize);
         }
     }
+    */
 }

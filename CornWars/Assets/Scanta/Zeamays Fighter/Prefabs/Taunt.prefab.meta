@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: 7a3cbc711da7b437384a4aa1207ad5d7
-PrefabImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 168602
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 1.0
   assetPath: Assets/Scanta/Zeamays Fighter/Prefabs/Taunt.prefab
   uploadId: 367661
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

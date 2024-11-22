@@ -16,7 +16,7 @@ public class BuildingData : ScriptableObject
     [SerializeField] private BuildingType _kindOfStructure;
     [SerializeField] private string _buildingName;
     [SerializeField] private int _obstacleLevel;
-    //[SerializeField] private bool _walkable;
+    [SerializeField] private bool _walkable;
 
     public int placed;
 

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Priority_Queue;
+using System;
 
 
 /// <summary>
@@ -43,9 +44,10 @@ public class PathfindingWithAStar
         }
     }
 
-    public void UpdateCellAfterbuildingPlaced(Vector2 pos, bool bWalkable)
+    public void UpdateCellAfterbuildingPlaced(Vector2 pos, bool bWalkable, int bLevel)
     {
         walkablePositions[pos] = bWalkable;
+        obstacles[pos] = bLevel;
     }
 
     private bool CanMove(Vector2 nextPosition)
@@ -62,10 +64,6 @@ public class PathfindingWithAStar
             new Vector2 (curr.x - 1, curr.y),
             new Vector2 (curr.x, curr.y + 1),
             new Vector2 (curr.x, curr.y - 1),
-            new Vector2 (curr.x + 1, curr.y + 1),
-            new Vector2 (curr.x + 1, curr.y - 1),
-            new Vector2 (curr.x - 1, curr.y + 1),
-            new Vector2 (curr.x - 1, curr.y - 1)
         };
 
         foreach (Vector2 node in possibleNodes)
@@ -79,7 +77,7 @@ public class PathfindingWithAStar
         return walkableNodes;
     }
 
-    private int HeuristicCostEstimate(Vector2 node, Vector2 goal, string heuristic)
+    private float HeuristicCostEstimate(Vector2 node, Vector2 goal, string heuristic)
     {
         switch (heuristic)
         {
@@ -98,10 +96,11 @@ public class PathfindingWithAStar
             Mathf.Pow(node.y - goal.y, 2));
     }
 
-    private int ManhattanEstimate(Vector2 node, Vector2 goal)
+    private float ManhattanEstimate(Vector2 node, Vector2 goal)
     {
-        return (int)(Mathf.Abs(node.x - goal.x) +
-            Mathf.Abs(node.y - goal.y));
+        var dx = Math.Abs(node.x - goal.x);
+        var dy = Math.Abs(node.y - goal.y);
+        return 0.1f * (dx + dy);
     }
 
     private int Weight(Vector2 node)
@@ -170,14 +169,14 @@ public class PathfindingWithAStar
             .Select(x => x.Key);
 
         // Represents h(x) or the score from whatever heuristic we're using
-        IDictionary<Vector2, int> heuristicScore = new Dictionary<Vector2, int>();
+        IDictionary<Vector2, float> heuristicScore = new Dictionary<Vector2, float>();
 
         // Represents g(x) or the distance from start to node "x" (Same meaning as in Dijkstra's "distances")
         IDictionary<Vector2, int> distanceFromStart = new Dictionary<Vector2, int>();
 
         foreach (Vector2 vertex in validNodes)
         {
-            heuristicScore.Add(new KeyValuePair<Vector2, int>(vertex, int.MaxValue));
+            heuristicScore.Add(new KeyValuePair<Vector2, float>(vertex, int.MaxValue));
             distanceFromStart.Add(new KeyValuePair<Vector2, int>(vertex, int.MaxValue));
         }
 
@@ -187,8 +186,8 @@ public class PathfindingWithAStar
         // The item dequeued from a priority queue will always be the one with the lowest int value
         //    In this case we will input nodes with their calculated distances from the start g(x),
         //    so we will always take the node with the lowest distance from the queue.
-        SimplePriorityQueue<Vector2, int> priorityQueue = new SimplePriorityQueue<Vector2, int>();
-        priorityQueue.Enqueue(startPosition, heuristicScore[startPosition]);
+        SimplePriorityQueue<Vector2, float> priorityQueue = new SimplePriorityQueue<Vector2, float>();
+        priorityQueue.Enqueue(startPosition, (int)heuristicScore[startPosition]);
 
         while (priorityQueue.Count > 0)
         {
@@ -225,7 +224,7 @@ public class PathfindingWithAStar
                     nodeParents[node] = curr;
                     distanceFromStart[node] = currScore;
 
-                    int hScore = distanceFromStart[node] + HeuristicCostEstimate(node, goalPosition, heuristic);
+                    float hScore = distanceFromStart[node] + HeuristicCostEstimate(node, goalPosition, heuristic);
                     heuristicScore[node] = hScore;
 
                     // If this node isn't already in the queue, make sure to add it. Since the
@@ -246,5 +245,25 @@ public class PathfindingWithAStar
     {
         AStarEuclid,
         AStarManhattan
+    }
+
+    public void DrawPositions()
+    {
+        if (walkablePositions == null)
+        {
+            return;
+        }
+
+        for (int b = 0; b < walkablePositions.Count; b++)
+        {
+            Gizmos.color = Color.red;
+            int size = _grid.CellSize;
+
+            var target = walkablePositions.ElementAt(b);
+            var node = _grid.GetCellPositionFromId(target.Key);
+            var _moveTarget = _grid.GetCellWorldCenter(node);
+
+            Gizmos.DrawWireCube(node, Vector3.one * size);
+        }
     }
 }
