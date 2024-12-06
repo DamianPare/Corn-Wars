@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc4124469f4c4814b0cc7d28e7cf43a, type: 3}
   m_Name: Spikes
   m_EditorClassIdentifier: 
+  _cost: 350
+  _upgradeCost: 
+  _sellValue: 96000000
   _maxHp: 
   _maxPlaceable: 10
   _armor: 0
@@ -22,6 +25,7 @@ MonoBehaviour:
   _buildingSprite: {fileID: 21300000, guid: 7a7a0374cf6d6fb4e86c6ad0748ee269, type: 3}
   _kindOfStructure: 4
   _buildingName: Spikes
-  _obstacleLevel: 0
+  _obstacleLevel: 10
   _walkable: 1
   placed: 0
+  Walkable: 1

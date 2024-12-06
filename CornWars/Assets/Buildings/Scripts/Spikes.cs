@@ -8,13 +8,15 @@ public class Spikes : BuildingShared
     [SerializeField] private GameObject firstLevelPrefab;
     [SerializeField] private GameObject secondLevelPrefab;
 
-    private void OnCollisionStay(Collision collision)
+
+    private void Update()
     {
-        //EnemyHealth -= damagePerSecond;
+        
     }
 
-    public void SpikeLevelUp()
+    public override void LevelUpBuilding()
     {
+        base.LevelUpBuilding();
         damagePerSecond = 2;
         firstLevelPrefab.SetActive(false);
         secondLevelPrefab.SetActive(true);

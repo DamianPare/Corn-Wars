@@ -4,10 +4,12 @@ public class Player
 {
     private int _playerIndex;
     private int _playerFaction;
+    private int _currentRound;
     public int PlayerFaction => _playerFaction;
 
-    private float _storedPower;
+    public float _storedCorn;
     private PlayerBuildingManager _buildingManager;
+    public GameManager _gameManager;
 
     public Action<float> OnPowerChanged;
 
@@ -17,20 +19,21 @@ public class Player
     {
         _playerIndex = playerIndex;
         _playerFaction = playerFaction;
-        _storedPower = 0;
+        _storedCorn = 0;
 
+        _gameManager = gameManager;
         _buildingManager = new PlayerBuildingManager(this, gameManager);
     }
 
     public void ResourceGain(float gain)
     {
-        _storedPower += gain;
-        OnPowerChanged?.Invoke(_storedPower);
+        _storedCorn += gain;
+        OnPowerChanged?.Invoke(_storedCorn);
     }
 
     public void ResourceLoss(float loss)
     {
-        _storedPower -= loss;
-        OnPowerChanged?.Invoke(_storedPower);
+        _storedCorn -= loss;
+        OnPowerChanged?.Invoke(_storedCorn);
     }
 }

@@ -31,16 +31,16 @@ public class BuildingPlacementManager : MonoBehaviour
     private GameObject _placementGhost = null;
     private bool _allowPlace = true;
 
-    private Dictionary<BuildingType, PoolManager> _placedBuildingPool;
+    private Dictionary<BuildingType, BuildingPoolManager> _placedBuildingPool;
     
 
     private void Start()
     {
-        _placedBuildingPool = new Dictionary<BuildingType, PoolManager>();
+        _placedBuildingPool = new Dictionary<BuildingType, BuildingPoolManager>();
         foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
         {
             _placedBuildingPool.Add(type,
-                new PoolManager(
+                new BuildingPoolManager(
                 () => CreatePoolObject(type),
                 GetBuildingFromPool,
                 ReturnBuildingToPool));
@@ -134,8 +134,9 @@ public class BuildingPlacementManager : MonoBehaviour
             {
                 chosenPlace = pos;
 
-                if (_localPlayerBuildingManager.CanPlace(_buildingToPlace))
+                if (_localPlayerBuildingManager.CanPlace(_buildingToPlace, chosenPlace))
                 {
+                    _localPlayerBuildingManager.PurchaseBuilding(_buildingToPlace);
                     SpawnBuilding(_buildingToPlace.KindOfStructure);
                 }
             }

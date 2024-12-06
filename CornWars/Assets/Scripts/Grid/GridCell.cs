@@ -51,7 +51,7 @@ public class GridCell
 
     public void RemoveUnitFromCell(CellUnit unit)
     {
-        _unitsInCellByFaction[unit.Faction].Remove(unit.name);
+        //_unitsInCellByFaction[unit.Faction].Remove(unit.name);
     }
 
     public List<CellUnit> GetOtherFactionUnits(int factionToIgnore)
@@ -89,7 +89,7 @@ public class GridCell
         Debug.Log(buildingInCell);
         Debug.Log(Walkable);
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel, buildingInCell);
     }
 
     public void RemoveBuildingFromCell(BuildingShared buildingInCell)
@@ -99,7 +99,7 @@ public class GridCell
         Debug.Log(_isWalkable);
         _obstacleLevel = buildingInCell.Data.ObstacleLevel;
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel, buildingInCell);
     }
 
     public void UpdateBuildingInCell(BuildingShared buildingInCell)
@@ -109,6 +109,6 @@ public class GridCell
         Debug.Log(_isWalkable);
         _obstacleLevel = buildingInCell.Data.ObstacleLevel;
         var pos = _parentGrid.CellIdFromPosition(buildingInCell.transform.position);
-        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel);
+        _parentGrid.Pathfinder.UpdateCellAfterbuildingPlaced(pos, _isWalkable, _obstacleLevel, buildingInCell);
     }
 }

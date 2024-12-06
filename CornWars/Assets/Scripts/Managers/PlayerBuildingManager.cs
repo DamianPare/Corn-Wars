@@ -84,16 +84,45 @@ public class PlayerBuildingManager
         }
     }
 
-    public bool CanPlace(BuildingData data)
+    public bool CanPlace(BuildingData data, Vector3 pos)
     {
+        //var barn = _gameManager.GameGrid.Pathfinder.GetBarn();
+
+        //var path = _gameManager.GameGrid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarManhattan, new Vector3(75, 0, -5), barn.transform.position);
+
+        ////if (path == null)
+        //{
+        //    return false;
+        //}
+
+        if (data.Cost > _owner._storedCorn)
+        {
+            Debug.Log("not enough corn");
+            return false;
+        }
+
         if (!_ownedBuildings.ContainsKey(data.KindOfStructure))
         {
-            Debug.Log("returning true");
             return true;
         }
 
         bool n = _ownedBuildings[data.KindOfStructure].Count < data.MaxPlaceable;
 
         return n;
+    }
+
+    public void PurchaseBuilding(BuildingData data)
+    {
+        _owner.ResourceLoss(data.Cost);
+    }
+
+    public void PurchaseUpgrade(BuildingData data, int level)
+    {
+        _owner.ResourceLoss(data.UpgradeCost[level]);
+    }
+
+    public void SellBuilding(BuildingData data, int level)
+    {
+        _owner.ResourceGain(data.SellValue[level]);
     }
 }

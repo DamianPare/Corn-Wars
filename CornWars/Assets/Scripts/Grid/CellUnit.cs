@@ -8,8 +8,14 @@ using System.Collections;
 
 public class CellUnit : MonoBehaviour
 {
+    [SerializeField] private UnitData ScriptedObjectData;
+
+    private UnitManager unitManager;
+
+    public UnitData Data => ScriptedObjectData;
+
     [SerializeField] private float MoveSpeed = 5f;
-    private Vector3 endPos;
+    public Vector3 endPos;
 
     private int _faction;
     public int Faction => _faction;
@@ -17,24 +23,20 @@ public class CellUnit : MonoBehaviour
     private GridCell _currentCell = null;
     public GridCell CurrentCell => _currentCell;
 
-    private Vector3 target;
+    public Vector3 _moveTarget;
     private Vector3 _previousPosition;
     private GameGrid _grid;
     private Vector3 offset;
 
     private bool canMove;
     private int i;
-    private BuildingShared _moveTarget;
 
-    private System.Collections.Generic.IList<Vector2> path;
-    public Queue<Vector3> path2 { get; private set; }
+    private IList<Vector2> path;
 
     private Animator animator;
     public GameObject testcube;
+    private bool defending;
 
-    /// <summary>
-    /// todo Update with max health from scriptable object and only allow health to change via function
-    /// </summary>
     private int _health = 20;
 
     /// <summary>
@@ -45,6 +47,7 @@ public class CellUnit : MonoBehaviour
 
     public void OnEnable()
     {
+        canMove = true;
         animator = gameObject.GetComponent<Animator>();
         Debug.Log("set animator");
     }
@@ -57,45 +60,38 @@ public class CellUnit : MonoBehaviour
 
     private void Update()
     {
-        if (canMove)
-        {
-            Move();
-            animator.SetTrigger("IsMoving");
-        }
+        //if (_grid.CellIdFromPosition(transform.position) == _grid.CellIdFromPosition(endPos))
+        //{       
 
-        if (!canMove && Input.GetKeyDown(KeyCode.Space))
-        {
-            canMove = true;
-        }
+        //}
+
+        //if (defending)
+        //{
+        //    //kill enemies
+        //}
     }
 
     public void Move()
     {
         float step = Time.deltaTime * MoveSpeed;
         var target = _grid.GetCellPositionFromId(path[i]);
-        //_moveTarget = _grid.GetCellWorldCenter(target);
-        transform.rotation = Quaternion.LookRotation(target - transform.position);
-        transform.position = Vector3.MoveTowards(transform.position, target, step);
+        _moveTarget = _grid.GetCellWorldCenter(target);
+        transform.rotation = Quaternion.LookRotation(_moveTarget - transform.position);
+        transform.position = Vector3.MoveTowards(transform.position, _moveTarget, step);
         _previousPosition = transform.position;
         _grid.UpdateUnitCell(this, _previousPosition);
 
-        if (transform.position == target && i >= 0)
-            i--;
-            Instantiate(testcube, target, Quaternion.identity);
-            Debug.Log(target);
-
-        if (i < 0)
+        if (transform.position == _moveTarget && i >= 0)
         {
-            canMove = false;
+            i--;
+            Instantiate(testcube, _moveTarget, Quaternion.identity);
         }
     }
 
-    public void Setup(int faction, int unitCounter, GameGrid gameGrid)
+    public void Setup(int unitCounter, GameGrid gameGrid)
     {
-        _faction = faction;
-        name = $"P{faction}_{name}_{unitCounter}";
+        name = $"P{name}_{unitCounter}";
         _grid = gameGrid;
-        path2 = new Queue<Vector3>();
     }
 
     public void SetCell(GridCell gridCell)
@@ -105,23 +101,61 @@ public class CellUnit : MonoBehaviour
 
     public void MoveToTarget(Vector3 target)
     {
-        if (transform.position != target)
-        {
-            endPos = target;
+        endPos = target;
 
-            path = _grid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarManhattan, transform.position, endPos);
+        path = _grid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarManhattan, transform.position, endPos);
+
+        if (transform.position != target && path != null)
+        {
             i = path.Count - 1;
+            Move();
         }
+    }
+
+    public void MoveToEnemy(CellUnit otherUnit)
+    {
+        // in same cell
+        if (_grid.CellIdFromPosition(transform.position) == _grid.CellIdFromPosition(otherUnit.transform.position))
+        {
+            transform.rotation = Quaternion.LookRotation(otherUnit.transform.position - transform.position);
+        }
+        else
+        {
+            // else find path
+
+            var path = _grid.Pathfinder.FindShortestPath(PathfindingWithAStar.PathfindingType.AStarEuclid, transform.position, otherUnit.transform.position);
+
+            if (path == null)
+            {
+                Debug.LogWarning("Failed to find path!");
+                return;
+            }
+            var firstNode = path.FirstOrDefault();
+            if (firstNode == null)
+            {
+                Debug.LogWarning("Failed to find node!");
+                return;
+            }
+
+            transform.rotation = Quaternion.LookRotation(_grid.GetCellPositionFromId(firstNode));
+        }
+
+        transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed);
+
+        _grid.UpdateUnitCell(this, _previousPosition);
+
+        _previousPosition = transform.position;
     }
 
     public void OnDrawGizmos()
     {
-        _grid.Pathfinder.DrawPositions();
 
         if (path == null)
         {
             return;
         }
+
+        _grid.Pathfinder.DrawPositions();
 
         for (int b = i; b > 0; b--)
         {
@@ -129,9 +163,20 @@ public class CellUnit : MonoBehaviour
             int size = _grid.CellSize;
 
             var target = _grid.GetCellPositionFromId(path[b]);
-            //target = _grid. (target);
+            _moveTarget = _grid.GetCellWorldCenter(target);
 
-            Gizmos.DrawWireCube(target, Vector3.one * size);
+            Gizmos.DrawWireCube(_moveTarget, Vector3.one * size);
         }
+    }
+
+    public void Die()
+    {
+        unitManager._enemyUnit.Remove(this);
+        unitManager.ReleasePooledUnit(this, transform.position);
+    }
+
+    public void SetManager(UnitManager manager)
+    {
+        unitManager = manager;
     }
 }

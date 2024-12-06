@@ -6,6 +6,7 @@ public class Wall : BuildingShared
 {
     public override void LevelUpBuilding()
     {
+        base.LevelUpBuilding();
         Data.Walkable = true;
         Manager.LevelUpBuilding(this);
         var renderer = GetComponentInChildren<MeshRenderer>();

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc4124469f4c4814b0cc7d28e7cf43a, type: 3}
   m_Name: Corn Field
   m_EditorClassIdentifier: 
+  _cost: 500
+  _upgradeCost: ee020000
+  _sellValue: fa000000f4010000
   _maxHp: c8000000
   _maxPlaceable: 5
   _armor: 5
@@ -23,5 +26,6 @@ MonoBehaviour:
   _kindOfStructure: 5
   _buildingName: Corn Field
   _obstacleLevel: 0
-  _walkable: 0
+  _walkable: 1
   placed: 0
+  Walkable: 1

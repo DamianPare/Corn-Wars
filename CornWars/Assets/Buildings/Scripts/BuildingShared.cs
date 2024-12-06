@@ -7,10 +7,13 @@ public class BuildingShared : MonoBehaviour
 {
     [SerializeField] private BuildingData ScriptedObjectData;
 
+    private int _buildingLevel;
+
     public BuildingData Data => ScriptedObjectData;
 
-    private int _currentHp;
-    private int _buildingLevel;
+    public int currentHp;
+
+    public int BuildingLevel => _buildingLevel;
 
     public int _placed;
 
@@ -21,7 +24,7 @@ public class BuildingShared : MonoBehaviour
     {
         if (ScriptedObjectData.MaxHp.Length > 0)
         {
-            _currentHp = ScriptedObjectData.MaxHp[0];
+            currentHp = ScriptedObjectData.MaxHp[0];
         }
     
         _buildingLevel = 1;
@@ -34,6 +37,11 @@ public class BuildingShared : MonoBehaviour
         Owner = owner;
     }
 
+    private void OnDisable()
+    {
+        _buildingLevel = 1;
+    }
+
     public int GetFaction()
     {
         return Owner.PlayerFaction;
@@ -41,28 +49,28 @@ public class BuildingShared : MonoBehaviour
 
     public void CalculateDamage(int damageReceived)
     {
-        damageReceived -= ScriptedObjectData.Armor;
         TakeDamage(damageReceived);
     }
 
     private void TakeDamage(int damageTaken)
     {
-        _currentHp -= damageTaken;
+        currentHp -= damageTaken;
     }
 
-    public void CanLevelUp()
+    public bool CanLevelUp()
     {
-        ScriptedObjectData.CanLevelUp(_buildingLevel);
+        bool n = _buildingLevel < ScriptedObjectData.SellValue.Length;
+        return n;
     }
 
     public virtual void LevelUpBuilding()
     {
-        
+        _buildingLevel++;
     }
 
-    public virtual void GetBuildingInfo()
+    public virtual BuildingData GetBuildingInfo()
     {
-
+        return ScriptedObjectData;
     }
 
     protected virtual void Tick()

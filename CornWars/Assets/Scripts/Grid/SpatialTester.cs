@@ -20,26 +20,26 @@ public class SpatialTester : MonoBehaviour
 
     private void Start()
     {
-        GenerateUnits(1, _factionUnitA, _unitParentA, ref _unitsListA);
-        GenerateUnits(2, _factionUnitB, _unitParentB, ref _unitsListB);
+        //GenerateUnits(1, _factionUnitA, _unitParentA, ref _unitsListA);
+        //GenerateUnits(2, _factionUnitB, _unitParentB, ref _unitsListB);
     }
 
-    private void GenerateUnits(int faction, CellUnit unitPrefab, Transform parent, ref List<CellUnit> list)
-    {
-        int mapWidth = _gameManager.GameGrid.Width * _gameManager.GameGrid.CellSize;
-        int mapHeight = _gameManager.GameGrid.Height * _gameManager.GameGrid.CellSize;
+    //private void GenerateUnits(int faction, CellUnit unitPrefab, Transform parent, ref List<CellUnit> list)
+    //{
+    //    int mapWidth = _gameManager.GameGrid.Width * _gameManager.GameGrid.CellSize;
+    //    int mapHeight = _gameManager.GameGrid.Height * _gameManager.GameGrid.CellSize;
 
-        for (int i = 0; i < _unitsToTestWith; i++)
-        {
-            Vector3 randomPos = new Vector3(Random.Range(-mapWidth, mapWidth), 5f, Random.Range(-mapHeight, mapHeight));
+    //    for (int i = 0; i < _unitsToTestWith; i++)
+    //    {
+    //        Vector3 randomPos = new Vector3(Random.Range(-mapWidth, mapWidth), 5f, Random.Range(-mapHeight, mapHeight));
 
-            CellUnit cellUnit = Instantiate<CellUnit>(unitPrefab, randomPos, Quaternion.identity, parent);
+    //        CellUnit cellUnit = Instantiate<CellUnit>(unitPrefab, randomPos, Quaternion.identity, parent);
 
-            cellUnit.Setup(faction, i, _gameManager.GameGrid);
+    //        cellUnit.Setup(faction, _gameManager.GameGrid);
 
-            list.Add(cellUnit);
-        }
-    }
+    //        list.Add(cellUnit);
+    //    }
+    //}
 
     private void Update()
     {

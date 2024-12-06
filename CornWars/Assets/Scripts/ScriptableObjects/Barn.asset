@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc4124469f4c4814b0cc7d28e7cf43a, type: 3}
   m_Name: Barn
   m_EditorClassIdentifier: 
+  _cost: 0
+  _upgradeCost: 
+  _sellValue: 00000000
   _maxHp: e8030000d0070000b80b0000
   _maxPlaceable: 1
   _armor: 1
@@ -24,4 +27,5 @@ MonoBehaviour:
   _buildingName: Barn
   _obstacleLevel: 0
   _walkable: 1
-  placed: 1
+  placed: 0
+  Walkable: 1

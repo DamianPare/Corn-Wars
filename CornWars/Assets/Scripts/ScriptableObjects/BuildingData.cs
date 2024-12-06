@@ -7,6 +7,9 @@ using UnityEngine.UI;
     menuName = "Create Scriptable Objects/Building Data")]
 public class BuildingData : ScriptableObject
 {
+    [SerializeField] private int _cost;
+    [SerializeField] private int[] _upgradeCost;
+    [SerializeField] private int[] _sellValue;
     [SerializeField] private int[] _maxHp;
     [SerializeField] private int _maxPlaceable;
     [SerializeField] private int _armor;
@@ -20,6 +23,10 @@ public class BuildingData : ScriptableObject
 
     public int placed;
 
+
+    public int Cost => _cost;
+    public int[] UpgradeCost => _upgradeCost;
+    public int[] SellValue => _sellValue;
     public int[] MaxHp => _maxHp;
     public int MaxPlaceable => _maxPlaceable;
     public int Armor => _armor;

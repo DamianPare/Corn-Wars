@@ -25,6 +25,7 @@ public class PathfindingWithAStar
 
     IDictionary<Vector2, Vector2> nodeParents;
     private GameGrid _grid;
+    private BuildingShared barn;
 
     public void UpdateWalkableObstacles(Dictionary<Vector2, GridCell> cells)
     {
@@ -44,10 +45,20 @@ public class PathfindingWithAStar
         }
     }
 
-    public void UpdateCellAfterbuildingPlaced(Vector2 pos, bool bWalkable, int bLevel)
+    public void UpdateCellAfterbuildingPlaced(Vector2 pos, bool bWalkable, int bLevel, BuildingShared building)
     {
         walkablePositions[pos] = bWalkable;
         obstacles[pos] = bLevel;
+
+        if (building.Data.KindOfStructure == BuildingType.Heart)
+        {
+            barn = building;
+        }
+    }
+
+    public BuildingShared GetBarn()
+    {
+        return barn;
     }
 
     private bool CanMove(Vector2 nextPosition)
@@ -107,11 +118,6 @@ public class PathfindingWithAStar
     {
         if (obstacles.Keys.Contains(node))
         {
-            if (obstacles[node] != 1)
-            {
-                Debug.Log(obstacles[node]);
-            }
-            
             return obstacles[node];
         }
         else
@@ -210,10 +216,7 @@ public class PathfindingWithAStar
             {
                 // Get the distance so far, add it to the distance to the neighbor
                 int currScore = distanceFromStart[curr] + Weight(node);
-                if (Weight(node) != 1)
-                {
-                    Debug.Log(Weight(node));
-                }
+
                 
 
                 // If our distance to this neighbor is LESS than another calculated shortest path
@@ -263,7 +266,7 @@ public class PathfindingWithAStar
             var node = _grid.GetCellPositionFromId(target.Key);
             var _moveTarget = _grid.GetCellWorldCenter(node);
 
-            Gizmos.DrawWireCube(node, Vector3.one * size);
+            Gizmos.DrawWireCube(_moveTarget, Vector3.one * size);
         }
     }
 }

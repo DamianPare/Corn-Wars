@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc4124469f4c4814b0cc7d28e7cf43a, type: 3}
   m_Name: Wall
   m_EditorClassIdentifier: 
+  _cost: 50
+  _upgradeCost: 
+  _sellValue: 19000000
   _maxHp: 
   _maxPlaceable: 100
   _armor: 0
@@ -20,8 +23,9 @@ MonoBehaviour:
   _buildingPlacedPrefab: {fileID: 6983203170609727706, guid: dcf22b649fb7ce54c891947e09cc6168,
     type: 3}
   _buildingSprite: {fileID: 21300000, guid: e0f7cd23834f1d14889c5a7b4132c94a, type: 3}
-  _kindOfStructure: 3
+  _kindOfStructure: 1
   _buildingName: Wall
   _obstacleLevel: 10000
   _walkable: 0
   placed: 0
+  Walkable: 1

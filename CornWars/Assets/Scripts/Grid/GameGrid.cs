@@ -11,6 +11,9 @@ public class GameGrid
     public int CellSize => _cellSize;
 
     public Dictionary<Vector2, GridCell> _grid = new();
+
+    public Dictionary<Vector2, Vector3> _gridWorldPoints = new();
+
     public int CellCount => _grid.Count;
 
     private float _cellTickTimer = 0f;
@@ -40,17 +43,18 @@ public class GameGrid
         int size = _cellSize;
         float halfSize = size / 2f;
 
-        float posX = 1 - ((w * size) + halfSize);
+        float posX = 0 - ((w * size) + halfSize);
         for (int i = -w; i <= w + 1; i++)
         {
-            float posZ = 1 - ((h * size) + halfSize);
+            float posZ = 0 - ((h * size) + halfSize);
             for (int j = -h; j <= h + 1; j++)
             {
-                posZ += size;
-
                 var cellId = new Vector2Int(i, j);
 
                 _grid.Add(cellId, new GridCell(this));
+                _gridWorldPoints.Add(cellId, new Vector3(posX, 0, posZ));
+
+                posZ += size;
             }
             posX += size;
         }
@@ -59,9 +63,9 @@ public class GameGrid
     public Vector3 ClampToCellBounds(Vector3 posToClamp)
     {
         return new Vector3(
-            Mathf.Clamp(posToClamp.x, _width * -_cellSize, _width * _cellSize),
+            Mathf.Clamp(posToClamp.x, _width * -_cellSize, _cellSize + _width * _cellSize),
             posToClamp.y,
-            Mathf.Clamp(posToClamp.z, _height * -_cellSize, _height * _cellSize));
+            Mathf.Clamp(posToClamp.z, _height * -_cellSize, _cellSize + _height * _cellSize));
     }
 
     public void UpdateUnitCell(CellUnit unit, Vector3 previousPosition)
@@ -91,29 +95,11 @@ public class GameGrid
         _grid[cellId].AddUnitToCell(unit);
     }
 
-    public Vector3 GetCellWorldCenter(Vector3 location)
+    public Vector3 GetCellWorldCenter(Vector3 originalPos)
     {
-        location = ClampToCellBounds(location);
-
-        int cellX = (int)(location.x / _cellSize);
-        int cellZ = (int)(location.z / _cellSize);
-
-        float halfSize = _cellSize / 2f;
-
-        float posX = ((cellX) * _cellSize);
-        float posZ = ((cellZ) * _cellSize);
-
-        if (location.x >= 0)
-            posX += halfSize;
-        else
-            posX -= halfSize;
-
-        if (location.z >= 0)
-            posZ += halfSize;
-        else
-            posZ -= halfSize;
-
-        return new Vector3(posX, location.y, posZ);
+        var location = ClampToCellBounds(originalPos);
+        
+        return _gridWorldPoints[CellIdFromPosition(location)];
     }
 
     public CellUnit FindClosestOtherFactionUnit(CellUnit unitSearching)
@@ -154,12 +140,31 @@ public class GameGrid
         // we could also check the surrounding grid cells
     }
 
-    public Vector2 CellIdFromPosition(Vector3 position)
+    public Vector2Int CellIdFromPosition(Vector3 position)
     {
-        Vector3 currentPosition = ClampToCellBounds(position);
+        Vector3 location = ClampToCellBounds(position);
 
-        int cellX = (int)(currentPosition.x / _cellSize);
-        int cellZ = (int)(currentPosition.z / _cellSize);
+        int cellX;// = (int)(currentPosition.x / _cellSize);
+        int cellZ;// = (int)(currentPosition.z / _cellSize);
+
+        if (location.x < 0)
+        {
+            cellX = Mathf.CeilToInt((location.x / _cellSize));
+        }
+        else
+        {
+            cellX = Mathf.CeilToInt(location.x / _cellSize);
+
+        }
+
+        if (location.z < 0)
+        {
+            cellZ = Mathf.CeilToInt(location.z / _cellSize);
+        }
+        else
+        {
+            cellZ = Mathf.CeilToInt(location.z / _cellSize);
+        }
 
         return new Vector2Int(cellX, cellZ);
     }
@@ -172,22 +177,28 @@ public class GameGrid
         return new Vector3(cellX, 0, cellZ);
     }
 
-    public BuildingShared FindClosestEnemySpawnBuilding(CellUnit unitSearching)
+    public BuildingShared FindClosestEnemyResourceBuilding(CellUnit unitSearching)
     {
-        BuildingShared closestEnemySpawnBuilding = null;
+        BuildingShared closestFarmBuilding = null;
 
         // todo, optimize to check a list of buildings instead of the entire grid
         foreach (var cell in _grid)
         {
             var building = cell.Value.BuildingInCell;
             if (building != null &&
-                building is Barn &&
-                building.GetFaction() != unitSearching.Faction)
+                building is CornField)
             {
-                closestEnemySpawnBuilding = building;
+                closestFarmBuilding = building;
             }
         }
-        return closestEnemySpawnBuilding;
+        return closestFarmBuilding;
+    }
+
+    public BuildingShared FindBarn()
+    {
+        var barn = _pathfinder.GetBarn();
+
+        return barn;
     }
 
     public void OnUpdate()
@@ -260,23 +271,5 @@ public class GameGrid
         }
 
         return cells;
-    }
-
-    public Vector3 FindClosestEnemySpawnBuilding()
-    {
-        // todo get the list of all enemy spawn building from each factions BuildingManager 
-
-        // todo get the edge of the building (the cell it occupies)
-        return Vector3.zero;
-    }
-
-    public LinkedList<PathNode> FindPath(Vector3 StartPosition, Vector3 EndPosition)
-    {
-        // todo loop through the nodes along the path and try to find the least cost path to our objective
-
-        // todo if our objective is blocked, find the least cost path and start destroying buildings in our way!
-
-        // todo not here - When we are moving along the path, if we encounter enemy units, fight them first!
-        return new LinkedList<PathNode>();
     }
 }
